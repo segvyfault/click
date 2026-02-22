@@ -76,7 +76,7 @@ impl ConfigBuilder {
             .arg(
                 Arg::new("fg")
                     .long("fg")
-                    .help("Text color, must be in hex format")
+                    .help("Text color, must be in \"#FFFFFF\" format")
                     .required(false)
                     .action(ArgAction::Set)
                     .value_parser(value_parser!(String)),
@@ -84,7 +84,7 @@ impl ConfigBuilder {
             .arg(
                 Arg::new("show-seconds")
                     .short('s')
-                    .help("Shows seconds alongside minutes and hours")
+                    .help("Shows seconds alongside minutes and hours, false by default")
                     .default_missing_value("true")
                     .action(ArgAction::SetTrue)
                     .value_parser(value_parser!(bool)),
@@ -92,7 +92,7 @@ impl ConfigBuilder {
             .arg(
                 Arg::new("centerize-text")
                     .short('c')
-                    .help("Makes the time centerized")
+                    .help("Makes the time centerized, false by default")
                     .default_missing_value("true")
                     .action(ArgAction::SetTrue)
                     .value_parser(value_parser!(bool)),
@@ -108,7 +108,7 @@ impl ConfigBuilder {
             .arg(
                 Arg::new("hide-date")
                     .short('d')
-                    .help("Hides the date")
+                    .help("Hides the date, false by default")
                     .default_missing_value("true")
                     .action(ArgAction::SetTrue)
                     .value_parser(value_parser!(bool)),
