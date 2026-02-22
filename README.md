@@ -9,3 +9,11 @@ i had 2 words on my mind, clock and tui, the best way i could fit "tui" in "cloc
 - [x] - hide date
 - [ ] - blinking colon
 - [x] - configuration
+
+## How to build
+```
+git clone https://github.com/segvyfault/click
+cd click
+cargo build -r
+sudo cp target/release/click /usr/bin/click
+```
