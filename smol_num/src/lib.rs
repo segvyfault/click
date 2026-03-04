@@ -55,10 +55,12 @@ impl<'a> BigNumber<'a> {
 
 impl Widget for BigNumber<'_> {
     fn render(self, area: Rect, buf: &mut Buffer) {
-        (0u8..5).for_each(|line| {
+        for line in 0u8..5 {
+            if line as u16 >= area.height { break; }
+
             let string = self.draw_line(line);
             buf.set_string(area.x, area.y + line as u16, string, Style::default().fg(*self.color));
-        });
+        }
     }
 }
 
