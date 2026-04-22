@@ -31,6 +31,9 @@ pub struct DisplayConfig {
     /// Hides todays date below the clock
     #[serde(default)]
     pub hide_date: bool,
+    /// Blinking colon (shown every even second)
+    #[serde(default)]
+    pub blinking_colon: bool
 }
 
 #[derive(Deserialize, Default, Debug)]
@@ -113,6 +116,14 @@ impl ConfigBuilder {
                     .action(ArgAction::SetTrue)
                     .value_parser(value_parser!(bool)),
             )
+            .arg(
+                Arg::new("blinking-colon")
+                    .short('B')
+                    .help("Makes the colons blink if the current second is even, false by default")
+                    .default_missing_value("true")
+                    .action(ArgAction::SetTrue)
+                    .value_parser(value_parser!(bool)),
+            )
             .get_matches();
 
         if let Some(color) = matches.get_one::<String>("fg") {
@@ -146,6 +157,12 @@ impl ConfigBuilder {
             && source != ValueSource::DefaultValue
         {
             self.display.hide_date = matches.get_flag("hide-date");
+        }
+
+        if let Some(source) = matches.value_source("blinking-colon")
+            && source != ValueSource::DefaultValue
+        {
+            self.display.blinking_colon = matches.get_flag("blinking-colon");
         }
 
         self

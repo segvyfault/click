@@ -13,14 +13,16 @@ use ratatui::{style::Color, widgets::Widget};
 use crate::table::{NumberVariant, PointsToString};
 
 pub struct BigNumber<'a> {
+    pub render_colon: bool,
+
     num: String,
     color: &'a Color,
 }
 
 impl<'a> BigNumber<'a> {
-    pub fn new(num: impl Into<String>, color: &'a Color) -> Self {
+    pub fn new(num: impl Into<String>, color: &'a Color, render_colon: bool) -> Self {
         let num = num.into().replace(char::is_alphabetic, "");
-        Self { num, color }
+        Self { num, color, render_colon }
     }
 
     pub fn width(&self) -> usize {
@@ -35,10 +37,16 @@ impl<'a> BigNumber<'a> {
             .for_each(|c| if let Ok(num) = NumberVariant::try_from(c) {
                 let is_colon = num == NumberVariant::Colon;
 
-                // dont ask me why, but tty-clock does it
-                // and i think it actually looks better this way
                 if is_colon {
-                    buffer.pop();
+                    if !self.render_colon {
+                        // dont render the colon if asked to
+                        // instead, fill it with the width of the character
+                        buffer.push_str(&" ".repeat(5));
+                        return;
+                    } else {
+                        // remove the big gap on the left side of the colon
+                        buffer.pop();
+                    }
                 }
 
                 let points = num.get_points(line as usize);
@@ -66,7 +74,7 @@ impl Widget for BigNumber<'_> {
 
 #[test]
 fn text_width() {
-    let num = BigNumber::new("123", &Color::White);
+    let num = BigNumber::new("123", &Color::White, true);
     let len = num.num.len();
 
     let smart = len * 6 + len;
@@ -81,7 +89,7 @@ fn text_width() {
 
 #[test]
 fn buffer_lines() {
-    let num = BigNumber::new("124", &Color::White);
+    let num = BigNumber::new("124", &Color::White, true);
 
     assert_eq!(
         num.draw_line(0).trim_start(),

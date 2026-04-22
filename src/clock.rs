@@ -20,6 +20,20 @@ impl DisplayClock {
         self.now = Local::now();
     }
 
+    fn is_even(&self) -> bool {
+        use chrono::Timelike;
+        self.now.second() % 2 == 0
+    }
+
+    pub fn should_draw_colon(&self) -> bool {
+        match self.config.read() {
+            Ok(config) =>
+                if config.blinking_colon { self.is_even() }
+                else                     { true }
+            Err(_) => true
+        }
+    }
+
     /// get time string
     pub fn time(&self) -> String {
         match self.config.read() {
