@@ -29,7 +29,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                             frame.area().centered(
                                 Constraint::Length(num_width),
                                 Constraint::Length(5)
-                            )
+                            ).offset(Offset::new(2, 0))
                         }
                         else { frame.area().offset(Offset::new(0, 1)) };
 
